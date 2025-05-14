@@ -4,7 +4,7 @@
 # @Author : zxiaosi
 # @desc : 角色表模型
 from pydantic import BaseModel, Field
-
+from typing import Optional
 from schemas.gmt import GMT
 
 
@@ -12,7 +12,7 @@ class RoleIn(BaseModel):
     """ 共享数据模型 """
     name: str = Field(example='角色名称')
     code: str = Field(example='角色code')
-    description: str | None = Field(example='角色描述')
+    description: Optional[str] = Field(example='角色描述')
 
 
 class RoleOut(RoleIn, GMT):

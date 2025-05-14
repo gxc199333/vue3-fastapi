@@ -3,7 +3,7 @@
 # @Time : 2023/1/29 18:41
 # @Author : zxiaosi
 # @desc : 用户表的增删改查
-from typing import Any
+from typing import Any, List, Optional
 
 from sqlalchemy import select
 from sqlalchemy.orm import Session
@@ -16,7 +16,7 @@ from schemas import UserCreate, UserUpdate, PageSchema
 
 class CRUDUser(CRUDBase[User, UserCreate, UserUpdate]):
 
-    def get_all(self, db: Session, page: PageSchema, name: str = None, *args) -> list[User | None]:
+    def get_all(self, db: Session, page: PageSchema, name: str = None, *args) -> Optional[List[User]]:
         stmt = select(self.model)
         if name is not None:
             stmt.where(self.model.name == name)
@@ -28,7 +28,7 @@ class CRUDUser(CRUDBase[User, UserCreate, UserUpdate]):
         setattr(obj_in, 'password', get_password_hash(obj_in.password))
         return super().create(db, obj_in=obj_in)
 
-    def get_user_by_name(self, db: Session, name: Any) -> LocalUser | None:
+    def get_user_by_name(self, db: Session, name: Any) -> Optional[LocalUser]:
         """ 通过用户名获取用户 """
         stmt = (
             select(self.model.__table__.c, Role.name.label('role_name'))

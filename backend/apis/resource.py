@@ -4,7 +4,7 @@
 # @Author : zxiaosi
 # @desc : 资源接口
 from fastapi import APIRouter
-
+from typing import Optional, List
 from common.depends import GetDB, PageQuery
 from common.result import Result, ResultSchema
 from common.route_log import LogRoute
@@ -15,7 +15,7 @@ router = APIRouter(route_class=LogRoute)
 
 
 @router.get("/list")
-def resources(db: GetDB, page: PageQuery, name: str | None = None) -> ResultSchema[list[ResourceOut]]:
+def resources(db: GetDB, page: PageQuery, name: Optional[str] = None) -> ResultSchema[List[ResourceOut]]:
     """ 资源列表 """
     resource_obj = resource_crud.get_all(db=db, page=page, name=name)
     total = resource_crud.get_count(db=db)

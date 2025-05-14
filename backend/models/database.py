@@ -12,6 +12,7 @@
 """
 import re
 from datetime import datetime
+from typing import Optional
 
 from sqlalchemy import String, Integer, SmallInteger, ForeignKey, func, text
 from sqlalchemy.orm import DeclarativeBase, mapped_column, relationship, Mapped, declared_attr
@@ -39,11 +40,11 @@ class Base(DeclarativeBase):
 class CommonMixin:
     """ 公共元素类 | 详见[4] """
 
-    is_deleted: Mapped[int | None] = \
+    is_deleted: Mapped[Optional[int]] = \
         mapped_column(SmallInteger, server_default=text('0'), comment="是否删除: 0 未删除 1 已删除")
-    create_time: Mapped[datetime | None] = \
+    create_time: Mapped[Optional[datetime]] = \
         mapped_column(insert_default=func.now(), comment="创建时间")
-    update_time: Mapped[datetime | None] = \
+    update_time: Mapped[Optional[datetime]] = \
         mapped_column(server_default=func.now(), onupdate=func.now(), comment="更新时间")
 
 
@@ -53,9 +54,9 @@ class User(Base, CommonMixin):
     id: Mapped[idPk]
     name: Mapped[str] = mapped_column(String(60), unique=True, comment="用户名")
     password: Mapped[str] = mapped_column(String(64), comment="密码")
-    avatar: Mapped[str | None] = mapped_column(String(60), comment="头像")
-    sex: Mapped[int | None] = mapped_column(SmallInteger, server_default=text('0'), comment="性别: 0 未知 1 男 2 女")
-    phone: Mapped[str | None] = mapped_column(String(30), comment="手机号")
+    avatar: Mapped[Optional[str]] = mapped_column(String(60), comment="头像")
+    sex: Mapped[Optional[int]] = mapped_column(SmallInteger, server_default=text('0'), comment="性别: 0 未知 1 男 2 女")
+    phone: Mapped[Optional[str]] = mapped_column(String(30), comment="手机号")
     version: Mapped[int] = mapped_column(Integer, server_default=text('1'), comment="版本号")
 
     user_role = relationship("UserRole", back_populates="user")
@@ -67,7 +68,7 @@ class Role(Base, CommonMixin):
     id: Mapped[idPk]
     name: Mapped[str] = mapped_column(String(32), comment="角色名称")
     code: Mapped[str] = mapped_column(String(32), comment="角色code")
-    description: Mapped[str | None] = mapped_column(String(60), comment="角色描述")
+    description: Mapped[Optional[str]] = mapped_column(String(60), comment="角色描述")
 
     user_role = relationship("UserRole", back_populates="role")
     role_resource = relationship("RoleResource", back_populates="role")
@@ -80,10 +81,10 @@ class Resource(Base, CommonMixin):
     name: Mapped[str] = mapped_column(String(32), comment="资源名称")
     level: Mapped[int] = mapped_column(SmallInteger, server_default=text('0'), comment="层级: 0 目录 1 菜单 2 权限")
     pid: Mapped[int] = mapped_column(server_default=text('0'), comment="父节点id")
-    icon: Mapped[str | None] = mapped_column(String(64), comment="图标")
-    menu_url: Mapped[str | None] = mapped_column(String(64), comment="页面路由")
-    request_url: Mapped[str | None] = mapped_column(String(64), comment="请求url")
-    permission_code: Mapped[str | None] = mapped_column(String(32), comment="权限code")
+    icon: Mapped[Optional[str]] = mapped_column(String(64), comment="图标")
+    menu_url: Mapped[Optional[str]] = mapped_column(String(64), comment="页面路由")
+    request_url: Mapped[Optional[str]] = mapped_column(String(64), comment="请求url")
+    permission_code: Mapped[Optional[str]] = mapped_column(String(32), comment="权限code")
 
     role_resource = relationship("RoleResource", back_populates="resource")
 
@@ -117,6 +118,6 @@ class SysLog(Base):
     url: Mapped[str] = mapped_column(String(64), comment="请求url")
     method: Mapped[str] = mapped_column(String(10), comment="请求方法")
     ip: Mapped[str] = mapped_column(String(20), comment="请求ip")
-    params: Mapped[str | None] = mapped_column(String(255), comment="请求参数")
-    spend_time: Mapped[str | None] = mapped_column(String(30), comment="响应时间")
-    create_time: Mapped[str | None] = mapped_column(String(30), comment="创建时间")
+    params: Mapped[Optional[str]] = mapped_column(String(255), comment="请求参数")
+    spend_time: Mapped[Optional[str]] = mapped_column(String(30), comment="响应时间")
+    create_time: Mapped[Optional[str]] = mapped_column(String(30), comment="创建时间")

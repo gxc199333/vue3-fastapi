@@ -5,7 +5,7 @@
 # @desc : 角色表的增删改查
 from sqlalchemy import select
 from sqlalchemy.orm import Session
-
+from typing import Optional, List
 from crud.base import CRUDBase
 from models import Role, UserRole
 from schemas import RoleIn, PageSchema
@@ -13,14 +13,14 @@ from schemas import RoleIn, PageSchema
 
 class CRUDUserRole(CRUDBase[Role, RoleIn, RoleIn]):
 
-    def get_all(self, db: Session, page: PageSchema, name: str = None, *args) -> list[Role | None]:
+    def get_all(self, db: Session, page: PageSchema, name: str = None, *args) -> Optional[List[Role]]:
         stmt = select(self.model)
         if name is not None:
             stmt.where(self.model.name == name)
 
         return super().get_all(db=db, page=page, sql=stmt)
 
-    def get_role_by_user_id(self, db: Session, user_id: int) -> Role | None:
+    def get_role_by_user_id(self, db: Session, user_id: int) -> Optional[Role]:
         """ 通过用户id获取角色 """
         stmt = (
             select(Role)
@@ -30,7 +30,7 @@ class CRUDUserRole(CRUDBase[Role, RoleIn, RoleIn]):
         )
         return db.scalar(stmt)
 
-    def get_role_by_code(self, db: Session, code: str) -> Role | None:
+    def get_role_by_code(self, db: Session, code: str) -> Optional[Role]:
         """ 通过角色名获取角色 """
         stmt = select(self.model).where(self.model.code == code).where(Role.is_deleted == 0)
         return db.scalar(stmt)

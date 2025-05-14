@@ -4,16 +4,16 @@
 # @Author : zxiaosi
 # @desc : 日志表的模型
 from pydantic import BaseModel, Field
-
+from typing import Optional
 
 class SysLogIn(BaseModel):
     """ 共享数据模型 """
     url: str = Field(example='请求url')
     method: str = Field(example='请求方法')
     ip: str = Field(example='请求ip')
-    params: str | None = Field(example='请求参数')
-    spend_time: str | None = Field(example='响应时间')
-    create_time: str | None = Field(example='创建时间')
+    params: Optional[str] = Field(example='请求参数')
+    spend_time: Optional[str] = Field(example='响应时间')
+    create_time: Optional[str] = Field(example='创建时间')
 
 
 class SysLogOut(SysLogIn):

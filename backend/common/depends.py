@@ -3,7 +3,8 @@
 # @Time : 2023/1/29 16:23
 # @Author : zxiaosi
 # @desc : 依赖项
-from typing import Annotated
+from typing import Optional, List
+from typing_extensions import Annotated
 
 from fastapi import Depends
 from redis_om import NotFoundError
@@ -60,7 +61,7 @@ def check_cookie(request: Request, db: GetDB):
 CheckCookie = Annotated[LocalUser, Depends(check_cookie)]
 
 
-def check_permission(code: list[str] | None = None):
+def check_permission(code: Optional[List[str]] = None):
     """ 校验权限code -- 鉴权"""
 
     def wrapper(request: Request, db: GetDB, _user: CheckCookie):

@@ -3,7 +3,7 @@
 # @Time : 2023/1/30 18:47
 # @Author : zxiaosi
 # @desc : 响应的数据模型与数据结构
-from typing import Any, TypeVar, Generic
+from typing import Any, TypeVar, Generic, Optional, Union, List
 
 from pydantic.generics import GenericModel
 
@@ -13,9 +13,9 @@ T = TypeVar("T")  # 泛型 T ：https://docs.pydantic.dev/usage/models/#generic-
 class ResultSchema(GenericModel, Generic[T]):
     """ 结果数据模型 """
     code: int
-    data: T | list[T] | None
-    total: int | None
-    msg: str | None
+    data: Union[T, List[T], None]
+    total: Optional[int]
+    msg: Optional[str]
 
 
 class Result:

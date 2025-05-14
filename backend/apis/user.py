@@ -5,7 +5,7 @@
 # @desc : 用户接口
 from fastapi import APIRouter
 from starlette.responses import Response
-
+from typing import List, Optional
 from common.depends import GetDB, CheckCookie, PageQuery
 from common.result import ResultSchema, Result
 from common.route_log import LogRoute
@@ -66,7 +66,7 @@ async def user_logout(response: Response, _user: CheckCookie) -> ResultSchema:
 
 
 @router.get("/menu")
-def user_menu(db: GetDB, _user: CheckCookie) -> ResultSchema[list[MenuOut]]:
+def user_menu(db: GetDB, _user: CheckCookie) -> ResultSchema[List[MenuOut]]:
     """ 获取用户菜单 """
     role_obj = role_crud.get_role_by_user_id(db, _user.id)
     if role_obj:
@@ -79,7 +79,7 @@ def user_menu(db: GetDB, _user: CheckCookie) -> ResultSchema[list[MenuOut]]:
 
 # @router.get("/list", dependencies=[Depends(check_permission(["sys:user:list"]))])
 @router.get("/list")
-def users(db: GetDB, page: PageQuery, name: str | None = None) -> ResultSchema[list[UserOut]]:
+def users(db: GetDB, page: PageQuery, name: Optional[str] = None) -> ResultSchema[List[UserOut]]:
     """ 获取用户列表 """
     users_obj = user_crud.get_all(db=db, page=page, name=name)
     total = user_crud.get_count(db)

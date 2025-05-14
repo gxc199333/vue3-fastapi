@@ -5,7 +5,7 @@
 # @desc : 资源表表的增删改查
 from sqlalchemy import select, insert
 from sqlalchemy.orm import Session
-
+from typing import Optional, List
 from crud.base import CRUDBase
 from models import Resource, UserRole, RoleResource, Role
 from schemas import UserCreate, UserUpdate, PageSchema
@@ -13,7 +13,7 @@ from schemas import UserCreate, UserUpdate, PageSchema
 
 class CRUDResource(CRUDBase[Resource, UserCreate, UserUpdate]):
 
-    def get_all(self, db: Session, page: PageSchema, name: str = None, *args) -> list[Role | None]:
+    def get_all(self, db: Session, page: PageSchema, name: str = None, *args) -> Optional[List[Role]]:
         stmt = select(self.model)
         if name is not None:
             stmt.where(self.model.name == name)
@@ -21,7 +21,7 @@ class CRUDResource(CRUDBase[Resource, UserCreate, UserUpdate]):
         stmt = stmt.offset((page.page - 1) * page.page_size).limit(page.page_size)
         return db.scalars(stmt).all()  # type: ignore
 
-    def get_resource_by_role_id(self, db: Session, role_id: int) -> list[Resource] | None:
+    def get_resource_by_role_id(self, db: Session, role_id: int) -> Optional[List[Resource]]:
         """ 根据角色id得到资源 """
         stmt = (
             select(self.model)
@@ -31,7 +31,7 @@ class CRUDResource(CRUDBase[Resource, UserCreate, UserUpdate]):
         )
         return db.scalars(stmt).all()  # type: ignore
 
-    def get_resource_by_role_code(self, db: Session, role_code: str) -> list[Resource] | None:
+    def get_resource_by_role_code(self, db: Session, role_code: str) -> Optional[List[Resource]]:
         """ 根据角色code得到资源 """
         stmt = (
             select(self.model)
@@ -42,7 +42,7 @@ class CRUDResource(CRUDBase[Resource, UserCreate, UserUpdate]):
         )
         return db.scalars(stmt).all()  # type: ignore
 
-    def get_resource_by_user_id(self, db: Session, user_id: int) -> list[Resource] | None:
+    def get_resource_by_user_id(self, db: Session, user_id: int) -> Optional[List[Resource]]:
         """ 根据用户id得到资源 """
         stmt = (
             select(self.model)
@@ -53,7 +53,7 @@ class CRUDResource(CRUDBase[Resource, UserCreate, UserUpdate]):
         )
         return db.scalars(stmt).all()  # type: ignore
 
-    def get_resource_by_url(self, db: Session, url: str) -> Resource | None:
+    def get_resource_by_url(self, db: Session, url: str) -> Optional[Resource]:
         """ 得到资源 """
         stmt = (
             select(self.model)

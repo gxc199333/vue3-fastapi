@@ -7,6 +7,7 @@ import base64
 import hashlib
 import time
 from binascii import Error
+from typing import Union
 
 import rsa
 
@@ -40,7 +41,7 @@ u59fcMDhQSvNNHqLP+KB/fT2bXO88pSzfE2ZMR5ivpA3rOdX
 """  # 私钥
 
 
-def get_cookie_hash(field: str | dict) -> str:
+def get_cookie_hash(field: Union[str, dict]) -> str:
     """ 加密 Cookie """
     sha256_dict = hashlib.sha256()
     sha256_dict.update((str(field) + str(time.time()) + settings.MD5_SALT).encode("utf-8"))

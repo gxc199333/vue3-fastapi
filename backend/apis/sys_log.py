@@ -4,7 +4,7 @@
 # @Author : zxiaosi
 # @desc : 日志接口
 from fastapi import APIRouter
-
+from typing import List
 from common.depends import PageQuery, GetDB
 from common.result import ResultSchema, Result
 from common.route_log import LogRoute
@@ -15,7 +15,7 @@ router = APIRouter(route_class=LogRoute)
 
 
 @router.get("/list")
-async def root(db: GetDB, page: PageQuery) -> ResultSchema[list[SysLogOut]]:
+async def root(db: GetDB, page: PageQuery) -> ResultSchema[List[SysLogOut]]:
     data = sys_log_crud.get_all(db, page)
     total = sys_log_crud.get_count(db)
     return Result.success(data=data, total=total)

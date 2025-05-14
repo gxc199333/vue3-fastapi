@@ -3,7 +3,7 @@
 # @Time : 2023/1/29 17:47
 # @Author : zxiaosi
 # @desc : 封装数据库增删改查方法
-from typing import Generic, TypeVar, Type, Any
+from typing import Generic, TypeVar, Type, Any, Optional, Union, List, Dict
 
 from fastapi.encoders import jsonable_encoder
 from pydantic import BaseModel
@@ -24,10 +24,10 @@ class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
     def __init__(self, model: Type[ModelType]):
         self.model = model
 
-    def get(self, db: Session, id: Any) -> ModelType | None:
+    def get(self, db: Session, id: Any) -> Optional[ModelType]:
         return db.get(self.model, id)
 
-    def get_all(self, db: Session, page: PageSchema, sql: Select = None, *args) -> list[ModelType | None]:
+    def get_all(self, db: Session, page: PageSchema, sql: Select = None, *args) -> Optional[List[ModelType]]:
         """ 获取所有对象 """
         stmt = select(self.model) if sql is None else sql
         stmt = stmt.offset((page.page - 1) * page.page_size).limit(page.page_size).order_by(desc(self.model.id))
@@ -42,7 +42,7 @@ class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
         db.refresh(db_obj)
         return db_obj
 
-    def update(self, db: Session, db_obj: ModelType, obj_in: UpdateSchemaType | dict[str, Any]) -> ModelType:
+    def update(self, db: Session, db_obj: ModelType, obj_in: Union[UpdateSchemaType, Dict[str, Any]]) -> ModelType:
         """ 通过 id 更新对象 """
         obj_data = jsonable_encoder(db_obj)
         if isinstance(obj_in, dict):  # 判断对象是否为字典类型(更新部分字段)

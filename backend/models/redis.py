@@ -5,7 +5,7 @@
 # @desc : 存储在Reids中的数据模板
 import json
 from datetime import datetime
-from typing import Any
+from typing import Any, Optional, List
 
 from redis_om import get_redis_connection, Field, HashModel, JsonModel, EmbeddedJsonModel, NotFoundError
 
@@ -41,17 +41,17 @@ class RequestIp(HashModel):
 
 class LocalResource(EmbeddedJsonModel):
     """ Redis资源信息 """
-    id: int | None
-    name: str | None
-    level: str | None
-    pid: str | None
-    icon: str | None
-    menu_url: str | None
-    request_url: str | None
-    permission_code: str | None
-    is_deleted: int | None
-    create_time: datetime | None
-    update_time: datetime | None
+    id: Optional[int]
+    name: Optional[str]
+    level: Optional[str]
+    pid: Optional[str]
+    icon: Optional[str]
+    menu_url: Optional[str]
+    request_url: Optional[str]
+    permission_code: Optional[str]
+    is_deleted: Optional[int]
+    create_time: Optional[datetime]
+    update_time: Optional[datetime]
 
     class Meta:
         database = REDIS_CONNECTION
@@ -62,17 +62,17 @@ class LocalResource(EmbeddedJsonModel):
 class LocalUser(MyJsonModel):
     """ Redis用户信息 """
     id: int = Field(index=True, full_text_search=True)
-    name: str | None
-    password: str | None
-    avatar: str | None
-    sex: int | None
-    phone: str | None
-    version: int | None
-    is_deleted: int | None
-    create_time: datetime | None
-    update_time: datetime | None
-    role_name: str | None  # 用户角色名称
-    permission_codes: list[str] = Field(default=[])  # 用户可以访问的权限code列表
+    name: Optional[str]
+    password: Optional[str]
+    avatar: Optional[str]
+    sex: Optional[int]
+    phone: Optional[str]
+    version: Optional[int]
+    is_deleted: Optional[int]
+    create_time: Optional[datetime]
+    update_time: Optional[datetime]
+    role_name: Optional[str]  # 用户角色名称
+    permission_codes: List[str] = Field(default=[])  # 用户可以访问的权限code列表
 
     # resources: list[LocalResource] = Field(default=[])  # 用户可以访问的资源列表
 

@@ -4,14 +4,14 @@
 # @Author : zxiaosi
 # @desc : 时间模型
 from datetime import datetime
-
+from typing import Optional
 from pydantic import BaseModel, validator
 
 
 class GMT(BaseModel):
     """ 时间字段处理 """
-    create_time: datetime | None
-    update_time: datetime | None
+    create_time: Optional[datetime]
+    update_time: Optional[datetime]
 
     @validator("create_time", "update_time")
     def format_time(cls, value: datetime) -> str:
